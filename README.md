@@ -1,2 +1,2 @@
 # AlienInvasion
-Python practic project
+Python practice project
