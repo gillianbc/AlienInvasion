@@ -3,6 +3,8 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
+
 
 class AlienInvasion:
     """ Overall class to manage game assets and behaviour """
@@ -11,12 +13,10 @@ class AlienInvasion:
         """ Initialise the game and create resources """
         pygame.init()
         self.settings = Settings()
-
         self._set_screen_mode()
-
         pygame.display.set_caption("Alien Invasion")
-
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
 
     def _set_screen_mode(self):
         if self.settings.fullscreen:
@@ -32,12 +32,26 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_screen()
+            # This update hook does nothing yet
+            self.bullets.update()
+            self._remove_old_bullets()
+            self._update_screen()
 
+    def _remove_old_bullets(self):
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
 
     def _update_screen(self):
         # Set the background colour
         self.screen.fill(self.settings.bg_color)
+        """ Draw the ship on the screen """
         self.ship.blitme()
+        """ Update images on the screen and flip (refresh?) to the new screen """
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         # make the most recently drawn screen visible
         pygame.display.flip()
 
@@ -59,7 +73,6 @@ class AlienInvasion:
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
-
     def _check_keydown_events(self, event):
         if event.key == pygame.K_q:
             sys.exit()
@@ -67,6 +80,14 @@ class AlienInvasion:
             self.ship.moving_right = True
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+        if event.key == pygame.K_SPACE:
+            self._fire_bullet()
+
+    def _fire_bullet(self):
+        """ Create a new bullet and add it to the bullets group """
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+
 
 
 if __name__ == '__main__':
