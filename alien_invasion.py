@@ -32,10 +32,13 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_screen()
-            # This update hook does nothing yet
-            self.bullets.update()
-            self._remove_old_bullets()
+            # This update method is overriden by the bullet.update()
+            self._update_bullets()
             self._update_screen()
+
+    def _update_bullets(self):
+        self.bullets.update()
+        self._remove_old_bullets()
 
     def _remove_old_bullets(self):
         for bullet in self.bullets.copy():
@@ -85,8 +88,9 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """ Create a new bullet and add it to the bullets group """
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
 
 

@@ -1,6 +1,7 @@
 PALE_LILAC = (197, 202, 233)
 LIGHT_BLUE = (187, 222, 251)
 BLACK = (0, 0, 0)
+LIGHT_GREY = (227, 227, 227)
 DARK_GRAY = (60, 60, 60)
 class Settings:
     """ A class to store all the settings for Alien Invasion """
@@ -12,12 +13,13 @@ class Settings:
         self.screen_height = 800
         # Let's have a default for fullscreen mode
         self.fullscreen = False
-        self.bg_color = BLACK
+        self.bg_color = LIGHT_GREY
         self.ship_speed = 1.5
 
         # Bullet settings
         self.bullet_speed = 1.0
         self.bullet_width = 3
         self.bullet_height = 15
-        self.bullet_color = LIGHT_BLUE
+        self.bullet_color = DARK_GRAY
+        self.bullets_allowed = 3
 
