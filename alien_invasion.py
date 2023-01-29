@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 
 class AlienInvasion:
@@ -16,7 +17,10 @@ class AlienInvasion:
         self._set_screen_mode()
         pygame.display.set_caption("Alien Invasion")
         self.ship = Ship(self)
+        # Sets of bullets and aliens
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        self.create_fleet()
 
     def _set_screen_mode(self):
         if self.settings.fullscreen:
@@ -35,6 +39,8 @@ class AlienInvasion:
             # This update method is overriden by the bullet.update()
             self._update_bullets()
             self._update_screen()
+
+
 
     def _update_bullets(self):
         self.bullets.update()
@@ -55,6 +61,9 @@ class AlienInvasion:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        # Draw the aliens on the screen
+        self.aliens.draw(self.screen)
+
         # make the most recently drawn screen visible
         pygame.display.flip()
 
@@ -92,6 +101,11 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
+    def create_fleet(self):
+        """ Create a fleet of aliens """
+        # Create one alien
+        alien = Alien(self)
+        self.aliens.add(alien)
 
 
 if __name__ == '__main__':
