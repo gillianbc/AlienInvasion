@@ -14,7 +14,7 @@ class Settings:
         # Let's have a default for fullscreen mode
         self.fullscreen = False
         self.bg_color = LIGHT_GREY
-        self.ship_speed = 1.5
+
 
         # Bullet settings
         self.bullet_speed = 1.0
@@ -25,8 +25,14 @@ class Settings:
 
         # Alien Settings
         self.alien_speed = 0.5
-        self.alien_drop_speed = 5.0
+        self.alien_drop_speed = 15.0
         # fleet_direction 1 means right, fleet_direction -1 means left
         self.fleet_direction = 1
+
+        # Ship Settings
+        self.ship_speed = 1.5
+        self.ship_limit = 3
+
+
 
 

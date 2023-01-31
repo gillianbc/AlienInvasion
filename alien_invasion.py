@@ -1,10 +1,12 @@
 import sys
 
+from time import sleep
 import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
 
 
 class AlienInvasion:
@@ -16,11 +18,15 @@ class AlienInvasion:
         self.settings = Settings()
         self._set_screen_mode()
         pygame.display.set_caption("Alien Invasion")
+
+        # Create an instance of GameStats to hold the stats
+        self.stats = GameStats(self)
+
         self.ship = Ship(self)
         # Sets of bullets and aliens
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
-        self.create_fleet()
+        self._create_fleet()
 
     def _set_screen_mode(self):
         if self.settings.fullscreen:
@@ -51,13 +57,27 @@ class AlienInvasion:
         # If no aliens left, destroy any remaining bullets and create a new fleet
         if not self.aliens:
             self.bullets.empty()
-            self.create_fleet()
+            self._create_fleet()
 
     def _update_aliens(self):
         """ Check if any alien in the fleet is at either edge """
         self._check_fleet_edges()
         """ Update the position of all the aliens in the fleet """
         self.aliens.update()
+        # Look for alien and ship collisions
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            print('Ship hit! ')
+            self._ship_hit()
+
+    def _ship_hit(self):
+        """ Respond to the ship hit by an alien """
+        self.stats.ships_remaining -= 1
+        self.aliens.empty()
+        self.bullets.empty()
+        self._create_fleet()
+        self.ship.centre_ship()
+        sleep(0.5)
+
 
     def _remove_old_bullets(self):
         for bullet in self.bullets.copy():
@@ -126,7 +146,7 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
-    def create_fleet(self):
+    def _create_fleet(self):
         """ Create a fleet of aliens """
         # Create one alien to find the number of aliens in a row
         # Spacing between each alien is equal to one alien width
