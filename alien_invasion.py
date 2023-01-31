@@ -28,6 +28,9 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
 
+        # Start alien invasion in an active state
+        self.game_active = True
+
     def _set_screen_mode(self):
         if self.settings.fullscreen:
             self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -40,9 +43,11 @@ class AlienInvasion:
         """ Start the main loop for the game """
         while True:
             self._check_events()
-            self.ship.update()
-            self._update_bullets()
-            self._update_aliens()
+            if self.game_active:
+                self.ship.update()
+                self._update_bullets()
+                self._update_aliens()
+
             self._update_screen()
 
     def _update_bullets(self):
@@ -68,16 +73,28 @@ class AlienInvasion:
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             print('Ship hit! ')
             self._ship_hit()
+        self._check_alien_landed()
 
     def _ship_hit(self):
         """ Respond to the ship hit by an alien """
-        self.stats.ships_remaining -= 1
-        self.aliens.empty()
-        self.bullets.empty()
-        self._create_fleet()
-        self.ship.centre_ship()
-        sleep(0.5)
+        if self.stats.ships_remaining == 0:
+            self.game_active = False
+        else:
+            self.stats.ships_remaining -= 1
+            self.aliens.empty()
+            self.bullets.empty()
+            self._create_fleet()
+            self.ship.centre_ship()
+            sleep(0.5)
 
+    def _check_alien_landed(self):
+        """ Check if any aliens have reached the bottom of the screen """
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= screen_rect.bottom:
+                """ Treat the same as when ship hit """
+                self._ship_hit()
+                break
 
     def _remove_old_bullets(self):
         for bullet in self.bullets.copy():
