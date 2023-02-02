@@ -146,6 +146,9 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
 
     # Helper methods start with a single _
     # They are not instance methods i.e. similar to private class methods in java
@@ -198,6 +201,11 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien.rect.height + (2 * alien.rect.height * row_number)
         self.aliens.add(alien)
+
+    def _check_play_button(self, mouse_pos):
+        """ Start a new game when the player clicks Play """
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.game_active = True
 
 
 if __name__ == '__main__':
