@@ -83,6 +83,7 @@ class AlienInvasion:
         """ Respond to the ship hit by an alien """
         if self.stats.ships_remaining == 0:
             self.game_active = False
+            pygame.mouse.set_visible(True)
         else:
             self.stats.ships_remaining -= 1
             self.aliens.empty()
@@ -203,6 +204,8 @@ class AlienInvasion:
         self.aliens.add(alien)
 
     def _check_play_button(self, mouse_pos):
+        if self.game_active:
+            return
         """ Start a new game when the player clicks Play """
         if self.play_button.rect.collidepoint(mouse_pos):
             self.stats.reset_stats()
@@ -211,6 +214,8 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.ship.centre_ship()
+            # Hide the mouse cursor
+            pygame.mouse.set_visible(False)
 
 
 if __name__ == '__main__':
