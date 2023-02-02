@@ -7,6 +7,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
+from button import Button
 
 
 class AlienInvasion:
@@ -29,7 +30,10 @@ class AlienInvasion:
         self._create_fleet()
 
         # Start alien invasion in an active state
-        self.game_active = True
+        self.game_active = False
+
+        # Make the Play button
+        self.play_button = Button(self, "Play")
 
     def _set_screen_mode(self):
         if self.settings.fullscreen:
@@ -125,6 +129,10 @@ class AlienInvasion:
             bullet.draw_bullet()
         # Draw the aliens on the screen
         self.aliens.draw(self.screen)
+
+        # Draw the play button if the game is inactive
+        if not self.game_active:
+            self.play_button.draw_button()
 
         # make the most recently drawn screen visible
         pygame.display.flip()
