@@ -1,0 +1,5 @@
+# Alien Invasion
+
+A little space invaders game which is a learning exercise from the book Python Crash Course
+
+This is my first venture into Python.  I'm not much interested in visual exercises, but I need to get some projects under my belt to get used to the syntax.
