@@ -17,6 +17,8 @@ class Settings:
         self.fullscreen = False
         self.bg_color = self.LIGHT_GREY
 
+        self.alien_points = 50
+
 
         # Bullet settings
         self.bullet_speed = 1.0
