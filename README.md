@@ -7,3 +7,5 @@ This is my first venture into Python.  I'm not much interested in visual exercis
 To run the game:
 
 > python3 alien_invasion.py
+
+I haven't bothered with the last few exercises such as game speeding up, points increasing with faster game, rounding scores, high score table
