@@ -65,8 +65,10 @@ class AlienInvasion:
         # Check for any bullets that have hit aliens
         # If so, get rid of the bullet and the alien
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        # If we have a fat bullet, we could hit more than one alien at a time
         if collisions:
-            self.stats.score += self.settings.alien_points
+            for dead_aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(dead_aliens)
             self.scoreboard.prep_score()
         # If no aliens left, destroy any remaining bullets and create a new fleet
         if not self.aliens:
@@ -217,6 +219,7 @@ class AlienInvasion:
         """ Start a new game when the player clicks Play """
         if self.play_button.rect.collidepoint(mouse_pos):
             self.stats.reset_stats()
+            self.scoreboard.prep_score()
             self.game_active = True
             self.aliens.empty()
             self.bullets.empty()
